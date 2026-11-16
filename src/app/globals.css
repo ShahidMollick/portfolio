@@ -24,3 +24,81 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* preloader film grain flicker */
+.preloader-grain {
+  animation: grain 0.5s steps(4) infinite;
+}
+
+@keyframes grain {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-3%, 2%); }
+  50% { transform: translate(2%, -3%); }
+  75% { transform: translate(-2%, -1%); }
+  100% { transform: translate(1%, 3%); }
+}
+
+/* The icon set's default hover (components/Icon.tsx): when the link or button around an icon is hovered or
+   focused, the stem reaches forward, the lotus petals open, and the spark turns and brightens. */
+.lotus * {
+  transform-box: view-box;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease;
+}
+.lotus-stem { transform-origin: 1px 10px; }
+.lotus-petal-up,
+.lotus-petal-down { transform-origin: 34px 10px; }
+.lotus-spark { opacity: 0.85; }
+
+:is(a, button, .group):is(:hover, :focus-visible) .lotus-stem { transform: scaleX(1.12); }
+:is(a, button, .group):is(:hover, :focus-visible) .lotus-head { transform: translateX(4px); }
+:is(a, button, .group):is(:hover, :focus-visible) .lotus-petal-up { transform: rotate(-14deg); }
+:is(a, button, .group):is(:hover, :focus-visible) .lotus-petal-down { transform: rotate(14deg); }
+:is(a, button, .group):is(:hover, :focus-visible) .lotus-spark { transform: rotate(90deg) scale(1.3); opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .lotus * { transition: none; }
+}
+
+/* The embroidered cursor (components/StitchCursor.tsx) replaces the pointer on mouse and trackpad. */
+html.stitch-cursor,
+html.stitch-cursor * {
+  cursor: none !important;
+}
+.stitch .stitch-petal {
+  transform-box: view-box;
+  transform-origin: 0 0;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.stitch .stitch-ring {
+  transition: stroke-dasharray 0.45s ease;
+}
+/* over something clickable the petals open out, and the running stitch loosens */
+.stitch.is-hot .stitch-petal { transform: translateY(-1.6px) scale(1.12); }
+.stitch.is-hot .stitch-ring { stroke-dasharray: 1.4 3.4; }
+.stitch .stitch-diamond {
+  transform-box: view-box;
+  transform-origin: 0 -16.4px;
+  transform: scale(0);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+/* (near a link, the facing petal's reach is set from StitchCursor.tsx itself) */
+/* clicked: the petals spring out around the cursor and a diamond opens at each tip, then all settle */
+.stitch.is-bloom .stitch-petal {
+  transform: translateY(-10px) scale(1.35);
+  transition-duration: 0.3s;
+}
+.stitch.is-bloom .stitch-diamond {
+  transform: scale(1.6);
+  transition-duration: 0.3s;
+}
+/* the running stitch widens and fades as the petals pass through it */
+.stitch .stitch-ring-wrap {
+  transform-box: view-box;
+  transform-origin: 0 0;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease;
+}
+.stitch.is-bloom .stitch-ring-wrap {
+  transform: scale(1.5);
+  opacity: 0;
+  transition-duration: 0.3s;
+}
